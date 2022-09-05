@@ -1,11 +1,12 @@
-import React from "react";
-import Counter from "./features/counter/counter.component";
+import AddPostForm from "./features/posts/add-post-form.component";
+import PostList from "./features/posts/post-list.component";
 
 function App() {
   return (
-    <div className="App">
-      <Counter />
-    </div>
+    <main className="App">
+      <AddPostForm />
+      <PostList />
+    </main>
   );
 }
 
