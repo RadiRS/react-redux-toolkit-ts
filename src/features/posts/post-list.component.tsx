@@ -1,6 +1,8 @@
 import { useAppSelector } from "../../app/hooks";
 import { selectAllPosts } from "./postSlices";
 
+import PostAuthor from "./post-author.component";
+
 type Props = {};
 
 const PostList = (props: Props) => {
@@ -10,6 +12,9 @@ const PostList = (props: Props) => {
     <article key={post.id}>
       <h3>{post.title}</h3>
       <p>{post.content.substring(0, 100)}</p>
+      <p className="postCredit">
+        <PostAuthor userId={post.userId} />
+      </p>
     </article>
   ));
 
