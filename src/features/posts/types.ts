@@ -7,6 +7,8 @@ export interface PostState {
   reactions: ReactionState;
 }
 
+// export type reaction = "thumbsUp" | "wow" | "hearth" | "rocket" | "coffee";
+
 export interface ReactionState {
   thumbsUp: number;
   wow: number;
