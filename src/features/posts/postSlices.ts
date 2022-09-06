@@ -4,14 +4,15 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { sub } from "date-fns";
 
 import { RootState } from "../../app/store";
+import { PostState, ReactionState } from "./types";
 
-interface PostState {
-  id: string;
-  title: string;
-  content: string;
-  userId?: string;
-  date: string;
-}
+const initialReaction: ReactionState = {
+  thumbsUp: 0,
+  wow: 0,
+  hearth: 0,
+  rocket: 0,
+  coffee: 0,
+};
 
 const initialState: PostState[] = [
   {
@@ -19,12 +20,14 @@ const initialState: PostState[] = [
     title: "Learning Redux Toolkit",
     content: "I've heard good things.",
     date: sub(new Date(), { minutes: 10 }).toISOString(),
+    reactions: initialReaction,
   },
   {
     id: "2",
     title: "Learning React Native",
     content: "This is cool framework",
     date: sub(new Date(), { minutes: 20 }).toISOString(),
+    reactions: initialReaction,
   },
 ];
 
@@ -44,15 +47,28 @@ const postSlice = createSlice({
             content,
             date: new Date().toISOString(),
             userId,
+            reactions: initialReaction,
           },
         };
       },
+    },
+    reactionAdded(
+      state,
+      action: { payload: { postId: string; reaction: keyof ReactionState } }
+    ) {
+      const { postId, reaction } = action.payload;
+
+      const existingPost = state.find((post) => post.id === postId);
+
+      if (!existingPost) return;
+
+      existingPost.reactions[reaction]++;
     },
   },
 });
 
 export const selectAllPosts = (state: RootState) => state.posts;
 
-export const { postAdded } = postSlice.actions;
+export const { postAdded, reactionAdded } = postSlice.actions;
 
 export default postSlice.reducer;

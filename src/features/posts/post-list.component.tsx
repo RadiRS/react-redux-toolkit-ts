@@ -3,6 +3,7 @@ import { selectAllPosts } from "./postSlices";
 
 import PostAuthor from "./post-author.component";
 import TimeAgo from "./time-ago.component";
+import ReactButton from "./react-button.component";
 
 type Props = {};
 
@@ -21,6 +22,7 @@ const PostList = (props: Props) => {
         <PostAuthor userId={post.userId} />
         <TimeAgo timestamp={post.date} />
       </p>
+      <ReactButton post={post} />
     </article>
   ));
 
