@@ -8,7 +8,7 @@ export interface PostInterface {
   id: string;
   title: string;
   body: string;
-  userId?: string;
+  userId?: number;
   date: string;
   reactions: ReactionInterface;
 }

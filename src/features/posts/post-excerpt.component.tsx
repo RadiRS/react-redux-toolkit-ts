@@ -1,5 +1,3 @@
-import React from "react";
-
 import PostAuthor from "./post-author.component";
 import TimeAgo from "./time-ago.component";
 import ReactButton from "./react-button.component";

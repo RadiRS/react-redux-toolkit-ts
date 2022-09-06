@@ -2,7 +2,7 @@ import { useAppSelector } from "../../app/hooks";
 import { selectAllUsers } from "../users/usersSlice";
 
 interface PostAuthorProps {
-  userId?: string;
+  userId?: number;
 }
 
 const PostAuthor = ({ userId }: PostAuthorProps) => {

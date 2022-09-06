@@ -1,3 +1,4 @@
+import { nanoid } from "@reduxjs/toolkit";
 import { useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import PostsExcerpt from "./post-excerpt.component";
@@ -33,7 +34,7 @@ const PostList = (props: Props) => {
       .slice()
       .sort((a, b) => b.date.localeCompare(a.date));
     content = orderedPosts.map((post) => (
-      <PostsExcerpt key={post.id} post={post} />
+      <PostsExcerpt key={post.id + nanoid()} post={post} />
     ));
   } else if (postsStatus === "failed") {
     content = <p>{postsError}</p>;

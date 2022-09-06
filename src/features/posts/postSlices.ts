@@ -32,6 +32,19 @@ export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
   return res.data;
 });
 
+export const addNewPost = createAsyncThunk(
+  "posts/addNewPost",
+  async (initialPost: { title: string; body: string; userId: string }) => {
+    try {
+      const res = await axios.post(POSTS_URL, initialPost);
+      return res.data;
+    } catch (error) {
+      console.log("error", error);
+      // return error.message;
+    }
+  }
+);
+
 const postSlice = createSlice({
   name: "posts",
   initialState,
@@ -47,7 +60,7 @@ const postSlice = createSlice({
             title,
             body: content,
             date: new Date().toISOString(),
-            userId,
+            userId: Number(userId),
             reactions: initialReaction,
           },
         };
@@ -94,7 +107,17 @@ const postSlice = createSlice({
       .addCase(fetchPosts.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
-      });
+      })
+      .addCase(
+        addNewPost.fulfilled,
+        (state, action: PayloadAction<PostInterface>) => {
+          action.payload.userId = Number(action.payload.userId);
+          action.payload.date = new Date().toISOString();
+          action.payload.reactions = initialReaction;
+
+          state.posts.push(action.payload);
+        }
+      );
   },
 });
 
