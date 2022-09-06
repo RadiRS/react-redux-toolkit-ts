@@ -2,6 +2,7 @@ import { useAppSelector } from "../../app/hooks";
 import { selectAllPosts } from "./postSlices";
 
 import PostAuthor from "./post-author.component";
+import TimeAgo from "./time-ago.component";
 
 type Props = {};
 
@@ -14,6 +15,7 @@ const PostList = (props: Props) => {
       <p>{post.content.substring(0, 100)}</p>
       <p className="postCredit">
         <PostAuthor userId={post.userId} />
+        <TimeAgo timestamp={post.date} />
       </p>
     </article>
   ));
