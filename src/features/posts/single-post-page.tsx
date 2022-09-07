@@ -1,3 +1,4 @@
+import { useParams } from "react-router-dom";
 import { selectPostById } from "./postSlices";
 
 import { useAppSelector } from "../../app/hooks";
@@ -8,7 +9,10 @@ import ReactButton from "./react-button.component";
 interface SinglePostPageProps {}
 
 const SinglePostPage = (props: SinglePostPageProps) => {
-  const postId = "";
+  const { postId = "" } = useParams();
+
+  console.log("postId", postId);
+
   const post = useAppSelector((state) => selectPostById(state, postId));
 
   if (!post) {

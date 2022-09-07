@@ -1,12 +1,16 @@
 import { Outlet } from "react-router-dom";
+import Header from "./header.component";
 
 type Props = {};
 
 const Layout = (props: Props) => {
   return (
-    <main className="App">
-      <Outlet />
-    </main>
+    <>
+      <Header />
+      <main className="App">
+        <Outlet />
+      </main>
+    </>
   );
 };
 
