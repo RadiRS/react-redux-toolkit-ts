@@ -6,9 +6,7 @@ import PostAuthor from "./post-author.component";
 import TimeAgo from "./time-ago.component";
 import ReactButton from "./react-button.component";
 
-interface SinglePostPageProps {}
-
-const SinglePostPage = (props: SinglePostPageProps) => {
+const SinglePostPage = () => {
   const { postId = "" } = useParams();
 
   const post = useAppSelector((state) => selectPostById(state, postId));

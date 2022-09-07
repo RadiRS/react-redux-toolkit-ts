@@ -1,9 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Header from "./header.component";
 
-type Props = {};
-
-const Layout = (props: Props) => {
+const Layout = () => {
   return (
     <>
       <Header />

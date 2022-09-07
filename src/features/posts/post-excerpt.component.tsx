@@ -4,12 +4,19 @@ import PostAuthor from "./post-author.component";
 import TimeAgo from "./time-ago.component";
 import ReactButton from "./react-button.component";
 import { PostInterface } from "./types";
+import { useAppSelector } from "../../app/hooks";
+import { selectPostById } from "./postSlices";
+import { EntityId } from "@reduxjs/toolkit";
 
 interface PostExcerptProps {
-  post: PostInterface;
+  postId: EntityId;
 }
 
-const PostsExcerpt = ({ post }: PostExcerptProps) => {
+const PostsExcerpt = ({ postId }: PostExcerptProps) => {
+  const post = useAppSelector((state) =>
+    selectPostById(state, postId)
+  ) as PostInterface;
+
   return (
     <article>
       <h2>{post.title}</h2>

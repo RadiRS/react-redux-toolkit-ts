@@ -3,9 +3,7 @@ import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { getCount, increaseCount } from "../features/posts/postSlices";
 
-type Props = {};
-
-const Header = (props: Props) => {
+const Header = () => {
   const dispatch = useAppDispatch();
 
   const count = useAppSelector(getCount);

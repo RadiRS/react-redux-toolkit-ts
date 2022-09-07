@@ -4,9 +4,7 @@ import { useAppSelector } from "../../app/hooks";
 import { selectPostByUser } from "../posts/postSlices";
 import { selectUserById } from "./usersSlice";
 
-type Props = {};
-
-const UserPage = (props: Props) => {
+const UserPage = () => {
   const { userId = "" } = useParams<{ userId: string }>();
 
   const user = useAppSelector((state) => selectUserById(state, userId));

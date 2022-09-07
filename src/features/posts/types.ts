@@ -1,7 +1,7 @@
 export interface InitialPostInterface {
-  posts: PostInterface[];
+  // posts: PostInterface[];
   status: StatusType;
-  error?: string | null;
+  error: string | undefined;
   count: number;
 }
 

@@ -6,9 +6,7 @@ import { addNewPost } from "./postSlices";
 import { selectAllUsers } from "../users/usersSlice";
 import { StatusType } from "./types";
 
-type Props = {};
-
-const AddPostForm = (props: Props) => {
+const AddPostForm = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 

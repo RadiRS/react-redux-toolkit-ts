@@ -6,9 +6,7 @@ import { selectAllUsers } from "../users/usersSlice";
 import { selectPostById, updatePost, deletePost } from "./postSlices";
 import { StatusType } from "./types";
 
-type Props = {};
-
-const EditPostForm = (props: Props) => {
+const EditPostForm = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 

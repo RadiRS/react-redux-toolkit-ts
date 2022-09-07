@@ -1,12 +1,9 @@
-import { nanoid } from "@reduxjs/toolkit";
 import { useAppSelector } from "../../app/hooks";
 import PostsExcerpt from "./post-excerpt.component";
-import { selectAllPosts, getPostsError, getPostsStatus } from "./postSlices";
+import { getPostsError, getPostsStatus, selectPostIds } from "./postSlices";
 
-type Props = {};
-
-const PostList = (props: Props) => {
-  const posts = useAppSelector(selectAllPosts);
+const PostList = () => {
+  const orderedPostsIds = useAppSelector(selectPostIds);
   const postsStatus = useAppSelector(getPostsStatus);
   const postsError = useAppSelector(getPostsError);
 
@@ -14,11 +11,8 @@ const PostList = (props: Props) => {
   if (postsStatus === "loading") {
     content = <p>Loading...</p>;
   } else if (postsStatus === "succeeded") {
-    const orderedPosts = posts
-      .slice()
-      .sort((a, b) => b.date.localeCompare(a.date));
-    content = orderedPosts.map((post) => (
-      <PostsExcerpt key={post.id + nanoid()} post={post} />
+    content = orderedPostsIds.map((postId) => (
+      <PostsExcerpt key={postId} postId={postId} />
     ));
   } else if (postsStatus === "failed") {
     content = <p>{postsError}</p>;

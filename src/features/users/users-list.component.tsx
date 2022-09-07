@@ -3,9 +3,7 @@ import { useAppSelector } from "../../app/hooks";
 
 import { selectAllUsers } from "./usersSlice";
 
-type Props = {};
-
-const UsersList = (props: Props) => {
+const UsersList = () => {
   const users = useAppSelector(selectAllUsers);
 
   const renderedUsers = users.map((user) => (
