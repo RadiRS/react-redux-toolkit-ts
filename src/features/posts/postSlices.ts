@@ -55,13 +55,25 @@ export const updatePost = createAsyncThunk(
     reactions?: ReactionInterface;
   }) => {
     const { id } = initialPost;
-
     try {
       const res = await axios.put(`${POSTS_URL}/${id}`, initialPost);
       return res.data;
     } catch (error) {
+      // console.log("error", error);
+      return initialPost; //! only for testing
+    }
+  }
+);
+
+export const deletePost = createAsyncThunk(
+  "posts/deletePost",
+  async (id: string) => {
+    try {
+      const res = await axios.delete(`${POSTS_URL}/${id}`);
+      if (res.status === 200) return id;
+      return `${res.status}: ${res.statusText}`;
+    } catch (error) {
       console.log("error", error);
-      // return error.message;
     }
   }
 );
@@ -155,7 +167,21 @@ const postSlice = createSlice({
           );
           state.posts = [...posts, action.payload];
         }
-      );
+      )
+      .addCase(deletePost.fulfilled, (state, action) => {
+        const id = action.payload;
+
+        if (!id) {
+          console.log("Delete could not complete");
+          console.log("action.payload", action.payload);
+          return;
+        }
+
+        const posts = state.posts.filter(
+          (post) => Number(post.id) !== Number(id)
+        );
+        state.posts = posts;
+      });
   },
 });
 

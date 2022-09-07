@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import { selectAllUsers } from "../users/usersSlice";
-import { selectPostById, updatePost } from "./postSlices";
+import { selectPostById, updatePost, deletePost } from "./postSlices";
 import { StatusType } from "./types";
 
 type Props = {};
@@ -60,6 +60,23 @@ const EditPostForm = (props: Props) => {
     }
   };
 
+  const onDeleteClicked = async () => {
+    try {
+      setRequestStatus("loading");
+
+      await dispatch(deletePost(postId));
+
+      setTitle("");
+      setContent("");
+      setUserId("");
+      navigate("/");
+    } catch (error) {
+      console.log("error", error);
+    } finally {
+      setRequestStatus("idle");
+    }
+  };
+
   if (!post) {
     return (
       <section>
@@ -100,6 +117,14 @@ const EditPostForm = (props: Props) => {
         />
         <button type="button" disabled={!isCanSave} onClick={onSaveEditClicked}>
           {requestStatus === "loading" ? "Loading..." : "Save Post"}
+        </button>
+        <button
+          type="button"
+          className="deleteButton"
+          disabled={!isCanSave}
+          onClick={onDeleteClicked}
+        >
+          {requestStatus === "loading" ? "Loading..." : "Delete Post"}
         </button>
       </form>
     </section>

@@ -1,30 +1,14 @@
 import { nanoid } from "@reduxjs/toolkit";
-import { useEffect } from "react";
-import { useAppSelector, useAppDispatch } from "../../app/hooks";
+import { useAppSelector } from "../../app/hooks";
 import PostsExcerpt from "./post-excerpt.component";
-import {
-  selectAllPosts,
-  getPostsError,
-  getPostsStatus,
-  fetchPosts,
-} from "./postSlices";
+import { selectAllPosts, getPostsError, getPostsStatus } from "./postSlices";
 
 type Props = {};
 
 const PostList = (props: Props) => {
-  const dispatch = useAppDispatch();
-
   const posts = useAppSelector(selectAllPosts);
   const postsStatus = useAppSelector(getPostsStatus);
   const postsError = useAppSelector(getPostsError);
-
-  useEffect(() => {
-    if (postsStatus === "idle") {
-      dispatch(fetchPosts());
-    }
-
-    return () => {};
-  }, [postsStatus, dispatch]);
 
   let content;
   if (postsStatus === "loading") {
