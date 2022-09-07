@@ -45,6 +45,27 @@ export const addNewPost = createAsyncThunk(
   }
 );
 
+export const updatePost = createAsyncThunk(
+  "posts/updatePost",
+  async (initialPost: {
+    id: string;
+    body: string;
+    userId: string;
+    title: string;
+    reactions?: ReactionInterface;
+  }) => {
+    const { id } = initialPost;
+
+    try {
+      const res = await axios.put(`${POSTS_URL}/${id}`, initialPost);
+      return res.data;
+    } catch (error) {
+      console.log("error", error);
+      // return error.message;
+    }
+  }
+);
+
 const postSlice = createSlice({
   name: "posts",
   initialState,
@@ -60,7 +81,7 @@ const postSlice = createSlice({
             title,
             body: content,
             date: new Date().toISOString(),
-            userId: Number(userId),
+            userId,
             reactions: initialReaction,
           },
         };
@@ -111,11 +132,28 @@ const postSlice = createSlice({
       .addCase(
         addNewPost.fulfilled,
         (state, action: PayloadAction<PostInterface>) => {
-          action.payload.userId = Number(action.payload.userId);
           action.payload.date = new Date().toISOString();
           action.payload.reactions = initialReaction;
 
           state.posts.push(action.payload);
+        }
+      )
+      .addCase(
+        updatePost.fulfilled,
+        (state, action: PayloadAction<PostInterface>) => {
+          if (!action.payload.id) {
+            console.log("Update could not complete");
+            console.log("Payload: ", action.payload);
+            return;
+          }
+
+          const { id } = action.payload;
+          action.payload.date = new Date().toISOString();
+
+          const posts = state.posts.filter(
+            (post) => Number(post.id) !== Number(id)
+          );
+          state.posts = [...posts, action.payload];
         }
       );
   },

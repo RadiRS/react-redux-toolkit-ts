@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { selectPostById } from "./postSlices";
 
 import { useAppSelector } from "../../app/hooks";
@@ -10,8 +10,6 @@ interface SinglePostPageProps {}
 
 const SinglePostPage = (props: SinglePostPageProps) => {
   const { postId = "" } = useParams();
-
-  console.log("postId", postId);
 
   const post = useAppSelector((state) => selectPostById(state, postId));
 
@@ -28,6 +26,7 @@ const SinglePostPage = (props: SinglePostPageProps) => {
       <h3>{post.title}</h3>
       <p>{post.body}</p>
       <p className="postCredit">
+        <Link to={`/post/edit/${post.id}`}>Edit Post</Link>
         <PostAuthor userId={post.userId} />
         <TimeAgo timestamp={post.date} />
       </p>

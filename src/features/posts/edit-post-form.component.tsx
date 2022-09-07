@@ -1,23 +1,25 @@
-import { FormEvent, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { FormEvent, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { addNewPost } from "./postSlices";
+import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import { selectAllUsers } from "../users/usersSlice";
+import { selectPostById, updatePost } from "./postSlices";
 import { StatusType } from "./types";
 
 type Props = {};
 
-const AddPostForm = (props: Props) => {
-  const dispatch = useAppDispatch();
+const EditPostForm = (props: Props) => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [userId, setUserId] = useState("");
-  const [addRequestStatus, setAddRequestStatus] = useState<StatusType>("idle");
-
+  const { postId = "" } = useParams();
+  const post = useAppSelector((state) => selectPostById(state, postId));
   const users = useAppSelector(selectAllUsers);
+
+  const [title, setTitle] = useState<string>(post?.title || "");
+  const [content, setContent] = useState<string>(post?.body || "");
+  const [userId, setUserId] = useState<string>(post?.userId || "");
+  const [requestStatus, setRequestStatus] = useState<StatusType>("idle");
 
   const onTitleChanged = (e: FormEvent<HTMLInputElement>): void =>
     setTitle(e.currentTarget.value);
@@ -29,29 +31,42 @@ const AddPostForm = (props: Props) => {
     setUserId(e.currentTarget.value);
 
   const isCanSave =
-    [title, content, userId].every(Boolean) && addRequestStatus === "idle";
+    [title, content, userId].every(Boolean) && requestStatus === "idle";
 
-  const onSavePostClicked = async () => {
+  const onSaveEditClicked = async () => {
     if (!isCanSave) return;
 
     try {
-      setAddRequestStatus("loading");
+      setRequestStatus("loading");
 
-      const params = { title, body: content, userId };
-      await dispatch(addNewPost(params)).unwrap();
+      const params = {
+        id: post?.id || "",
+        title,
+        body: content,
+        userId,
+        reactions: post?.reactions,
+      };
+
+      await dispatch(updatePost(params)).unwrap();
+
       setTitle("");
       setContent("");
       setUserId("");
-
-      navigate("/");
+      navigate(`/post/${postId}`);
     } catch (error) {
-      console.log("Failed to save the post with error:", error);
+      console.log("error", error);
     } finally {
-      setAddRequestStatus("idle");
+      setRequestStatus("idle");
     }
-
-    // dispatch(addNewPost(title, content, userId));
   };
+
+  if (!post) {
+    return (
+      <section>
+        <h2>Post not found!</h2>
+      </section>
+    );
+  }
 
   const usersOptions = users.map((user) => (
     <option key={user.id} value={user.id}>
@@ -61,7 +76,7 @@ const AddPostForm = (props: Props) => {
 
   return (
     <section>
-      <h2>Add a New Post</h2>
+      <h2>Edit Post</h2>
       <form>
         <label htmlFor="postTitle">Post Title:</label>
         <input
@@ -83,12 +98,12 @@ const AddPostForm = (props: Props) => {
           value={content}
           onChange={onContentChanged}
         />
-        <button type="button" disabled={!isCanSave} onClick={onSavePostClicked}>
-          {addRequestStatus === "loading" ? "Loading..." : "Save Post"}
+        <button type="button" disabled={!isCanSave} onClick={onSaveEditClicked}>
+          {requestStatus === "loading" ? "Loading..." : "Save Post"}
         </button>
       </form>
     </section>
   );
 };
 
-export default AddPostForm;
+export default EditPostForm;
