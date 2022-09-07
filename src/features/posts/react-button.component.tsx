@@ -1,12 +1,12 @@
 import { useAppDispatch } from "../../app/hooks";
 import { reactionAdded } from "./postSlices";
-import { PostState, ReactionState } from "./types";
+import { PostInterface, ReactionInterface } from "./types";
 
 interface ReactButtonsProps {
-  post: PostState;
+  post: PostInterface;
 }
 
-const reactionEmoji: Record<keyof ReactionState, string> = {
+const reactionEmoji: Record<keyof ReactionInterface, string> = {
   thumbsUp: "👍",
   wow: "😲",
   hearth: "❤️",
@@ -17,7 +17,7 @@ const reactionEmoji: Record<keyof ReactionState, string> = {
 const ReactButtons = ({ post }: ReactButtonsProps) => {
   const dispatch = useAppDispatch();
 
-  const onPressReact = (reactName: keyof ReactionState) => {
+  const onPressReact = (reactName: keyof ReactionInterface) => {
     dispatch(reactionAdded({ postId: post.id, reaction: reactName }));
   };
 
@@ -27,9 +27,9 @@ const ReactButtons = ({ post }: ReactButtonsProps) => {
         key={name}
         type="button"
         className="reactionButton"
-        onClick={() => onPressReact(name as keyof ReactionState)}
+        onClick={() => onPressReact(name as keyof ReactionInterface)}
       >
-        {emoji} {post.reactions[name as keyof ReactionState]}
+        {emoji} {post.reactions[name as keyof ReactionInterface]}
       </button>
     );
   });

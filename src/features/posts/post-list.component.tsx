@@ -1,37 +1,24 @@
 import { useAppSelector } from "../../app/hooks";
-import { selectAllPosts } from "./postSlices";
+import PostsExcerpt from "./post-excerpt.component";
+import { getPostsError, getPostsStatus, selectPostIds } from "./postSlices";
 
-import PostAuthor from "./post-author.component";
-import TimeAgo from "./time-ago.component";
-import ReactButton from "./react-button.component";
+const PostList = () => {
+  const orderedPostsIds = useAppSelector(selectPostIds);
+  const postsStatus = useAppSelector(getPostsStatus);
+  const postsError = useAppSelector(getPostsError);
 
-type Props = {};
+  let content;
+  if (postsStatus === "loading") {
+    content = <p>Loading...</p>;
+  } else if (postsStatus === "succeeded") {
+    content = orderedPostsIds.map((postId) => (
+      <PostsExcerpt key={postId} postId={postId} />
+    ));
+  } else if (postsStatus === "failed") {
+    content = <p>{postsError}</p>;
+  }
 
-const PostList = (props: Props) => {
-  const posts = useAppSelector(selectAllPosts);
-
-  const orderedPosts = posts
-    .slice()
-    .sort((a, b) => b.date.localeCompare(a.date));
-
-  const renderedPosts = orderedPosts.map((post) => (
-    <article key={post.id}>
-      <h3>{post.title}</h3>
-      <p>{post.content.substring(0, 100)}</p>
-      <p className="postCredit">
-        <PostAuthor userId={post.userId} />
-        <TimeAgo timestamp={post.date} />
-      </p>
-      <ReactButton post={post} />
-    </article>
-  ));
-
-  return (
-    <section>
-      <h2>Posts</h2>
-      {renderedPosts}
-    </section>
-  );
+  return <section>{content}</section>;
 };
 
 export default PostList;

@@ -1,37 +1,54 @@
 import { FormEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { postAdded } from "./postSlices";
+import { addNewPost } from "./postSlices";
 import { selectAllUsers } from "../users/usersSlice";
+import { StatusType } from "./types";
 
-type Props = {};
-
-const AddPostForm = (props: Props) => {
+const AddPostForm = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [userId, setUserId] = useState("");
+  const [addRequestStatus, setAddRequestStatus] = useState<StatusType>("idle");
 
   const users = useAppSelector(selectAllUsers);
 
   const onTitleChanged = (e: FormEvent<HTMLInputElement>): void =>
     setTitle(e.currentTarget.value);
 
-  const onContentChanged = (e: FormEvent<HTMLInputElement>) =>
+  const onContentChanged = (e: FormEvent<HTMLTextAreaElement>) =>
     setContent(e.currentTarget.value);
 
   const onAuthorChanged = (e: FormEvent<HTMLSelectElement>) =>
     setUserId(e.currentTarget.value);
 
-  const isCanSave = Boolean(title) && Boolean(content) && Boolean(userId);
+  const isCanSave =
+    [title, content, userId].every(Boolean) && addRequestStatus === "idle";
 
-  const onSavePostClicked = () => {
+  const onSavePostClicked = async () => {
     if (!isCanSave) return;
 
-    dispatch(postAdded(title, content, userId));
-    setTitle("");
-    setContent("");
-    setUserId("");
+    try {
+      setAddRequestStatus("loading");
+
+      const params = { title, body: content, userId };
+      await dispatch(addNewPost(params)).unwrap();
+      setTitle("");
+      setContent("");
+      setUserId("");
+
+      navigate("/");
+    } catch (error) {
+      console.log("Failed to save the post with error:", error);
+    } finally {
+      setAddRequestStatus("idle");
+    }
+
+    // dispatch(addNewPost(title, content, userId));
   };
 
   const usersOptions = users.map((user) => (
@@ -57,16 +74,15 @@ const AddPostForm = (props: Props) => {
           <option value=""></option>
           {usersOptions}
         </select>
-        <label htmlFor="postCotent">Post Cotent:</label>
-        <input
-          type="text"
-          id="postCotent"
-          name="postCotent"
+        <label htmlFor="postContent">Post Content:</label>
+        <textarea
+          id="postContent"
+          name="postContent"
           value={content}
           onChange={onContentChanged}
         />
         <button type="button" disabled={!isCanSave} onClick={onSavePostClicked}>
-          Save Post
+          {addRequestStatus === "loading" ? "Loading..." : "Save Post"}
         </button>
       </form>
     </section>
