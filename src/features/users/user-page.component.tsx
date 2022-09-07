@@ -1,8 +1,7 @@
-import React from "react";
 import { Link, useParams } from "react-router-dom";
 
 import { useAppSelector } from "../../app/hooks";
-import { selectAllPosts } from "../posts/postSlices";
+import { selectPostByUser } from "../posts/postSlices";
 import { selectUserById } from "./usersSlice";
 
 type Props = {};
@@ -13,8 +12,7 @@ const UserPage = (props: Props) => {
   const user = useAppSelector((state) => selectUserById(state, userId));
 
   const postsForUser = useAppSelector((state) => {
-    const allPosts = selectAllPosts(state);
-    return allPosts.filter((post) => Number(post.userId) === Number(userId));
+    return selectPostByUser(state, userId);
   });
 
   const postTitles = postsForUser.map((post) => (

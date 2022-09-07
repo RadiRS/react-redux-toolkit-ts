@@ -2,6 +2,7 @@ export interface InitialPostInterface {
   posts: PostInterface[];
   status: StatusType;
   error?: string | null;
+  count: number;
 }
 
 export interface PostInterface {
