@@ -4,6 +4,7 @@ import axios from "axios";
 import { RootState } from "../../app/store";
 
 const USERS_URL = "https://jsonplaceholder.typicode.com/users";
+
 interface UserState {
   id: string;
   name: string;
@@ -28,5 +29,7 @@ const usersSlice = createSlice({
 });
 
 export const selectAllUsers = (state: RootState) => state.users;
+export const selectUserById = (state: RootState, userId: string) =>
+  state.users.find((user) => Number(user.id) === Number(userId));
 
 export default usersSlice.reducer;
