@@ -71,11 +71,11 @@ const AddPostForm = (props: Props) => {
           <option value=""></option>
           {usersOptions}
         </select>
-        <label htmlFor="postCotent">Post Cotent:</label>
+        <label htmlFor="postContent">Post Content:</label>
         <input
           type="text"
-          id="postCotent"
-          name="postCotent"
+          id="postContent"
+          name="postContent"
           value={content}
           onChange={onContentChanged}
         />
