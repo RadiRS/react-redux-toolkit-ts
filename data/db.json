@@ -310,35 +310,58 @@
       }
     },
     {
-      "userId": 2,
+      "userId": "4",
       "id": 11,
       "title": "et ea vero quia laudantium autem",
       "body": "delectus reiciendis molestiae occaecati non minima eveniet qui voluptatibus\naccusamus in eum beatae sit\nvel qui neque voluptates ut commodi qui incidunt\nut animi commodi",
       "reactions": {
-        "thumbsUp": 8,
-        "wow": 0,
+        "thumbsUp": 14,
+        "wow": 4,
         "heart": 0,
-        "rocket": 0,
-        "coffee": 1
-      }
+        "rocket": 4,
+        "coffee": 7,
+        "hearth": 5
+      },
+      "date": "2022-09-19T14:32:15.878Z"
     },
     {
       "userId": 2,
       "id": 12,
       "title": "in quibusdam tempore odit est dolorem",
-      "body": "itaque id aut magnam\npraesentium quia et ea odit et ea voluptas et\nsapiente quia nihil amet occaecati quia id voluptatem\nincidunt ea est distinctio odio"
+      "body": "itaque id aut magnam\npraesentium quia et ea odit et ea voluptas et\nsapiente quia nihil amet occaecati quia id voluptatem\nincidunt ea est distinctio odio",
+      "reactions": {
+        "thumbsUp": 8,
+        "wow": 2,
+        "hearth": 4,
+        "rocket": 1,
+        "coffee": 8
+      }
     },
     {
       "userId": 2,
       "id": 13,
       "title": "dolorum ut in voluptas mollitia et saepe quo animi",
-      "body": "aut dicta possimus sint mollitia voluptas commodi quo doloremque\niste corrupti reiciendis voluptatem eius rerum\nsit cumque quod eligendi laborum minima\nperferendis recusandae assumenda consectetur porro architecto ipsum ipsam"
+      "body": "aut dicta possimus sint mollitia voluptas commodi quo doloremque\niste corrupti reiciendis voluptatem eius rerum\nsit cumque quod eligendi laborum minima\nperferendis recusandae assumenda consectetur porro architecto ipsum ipsam",
+      "reactions": {
+        "thumbsUp": 1,
+        "wow": 0,
+        "hearth": 0,
+        "rocket": 0,
+        "coffee": 0
+      }
     },
     {
       "userId": 2,
       "id": 14,
       "title": "voluptatem eligendi optio",
-      "body": "fuga et accusamus dolorum perferendis illo voluptas\nnon doloremque neque facere\nad qui dolorum molestiae beatae\nsed aut voluptas totam sit illum"
+      "body": "fuga et accusamus dolorum perferendis illo voluptas\nnon doloremque neque facere\nad qui dolorum molestiae beatae\nsed aut voluptas totam sit illum",
+      "reactions": {
+        "thumbsUp": 2,
+        "wow": 0,
+        "hearth": 1,
+        "rocket": 0,
+        "coffee": 0
+      }
     },
     {
       "userId": 2,
@@ -356,7 +379,14 @@
       "userId": 2,
       "id": 17,
       "title": "fugit voluptas sed molestias voluptatem provident",
-      "body": "eos voluptas et aut odit natus earum\naspernatur fuga molestiae ullam\ndeserunt ratione qui eos\nqui nihil ratione nemo velit ut aut id quo"
+      "body": "eos voluptas et aut odit natus earum\naspernatur fuga molestiae ullam\ndeserunt ratione qui eos\nqui nihil ratione nemo velit ut aut id quo",
+      "reactions": {
+        "thumbsUp": 0,
+        "wow": 0,
+        "hearth": 0,
+        "rocket": 0,
+        "coffee": 0
+      }
     },
     {
       "userId": 2,
@@ -876,7 +906,14 @@
       "title": "Checking",
       "body": "check one two three",
       "userId": 2,
-      "date": "2022-04-26T23:03:52.299Z"
+      "date": "2022-04-26T23:03:52.299Z",
+      "reactions": {
+        "thumbsUp": 15,
+        "wow": 4,
+        "hearth": 7,
+        "rocket": 5,
+        "coffee": 3
+      }
     },
     {
       "title": "Test Post",

@@ -25,7 +25,7 @@ const UserPage = () => {
     const { ids, entities } = postsForUser;
     content = ids.map((id) => (
       <li key={id}>
-        <Link to={`/post/${entities[id]}`}>{entities[id]?.title}</Link>
+        <Link to={`/post/${entities[id]?.id}`}>{entities[id]?.title}</Link>
       </li>
     ));
   } else if (isError) {

@@ -16,7 +16,7 @@ const PostList = () => {
       <PostsExcerpt key={postId} postId={postId} />
     ));
   } else if (isError) {
-    content = <p>{error}</p>;
+    content = <p>{error.toString()}</p>;
   }
 
   return <section>{content}</section>;
