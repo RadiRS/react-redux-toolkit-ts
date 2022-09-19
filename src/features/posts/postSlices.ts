@@ -4,13 +4,10 @@ import {
   EntityState,
 } from "@reduxjs/toolkit";
 import { sub } from "date-fns";
+import { RootState } from "../../app/store";
 import { apiSlice } from "../api/apiSlice";
 
-import {
-  ReactionInterface,
-  PostInterface,
-  InitialPostInterface,
-} from "./types";
+import { ReactionInterface, PostInterface } from "./types";
 
 const initialReaction: ReactionInterface = {
   thumbsUp: 0,
@@ -25,6 +22,8 @@ const postsAdapter = createEntityAdapter<PostInterface>({
 });
 
 const initialState = postsAdapter.getInitialState();
+
+console.log("initialState", initialState);
 
 export const extendedApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -179,5 +178,5 @@ export const {
   selectIds: selectPostIds,
   //! Pass in a selector that return the posts slice of state
 } = postsAdapter.getSelectors(
-  (state) => selectPostsData(state) ?? initialState
+  (state: RootState) => selectPostsData(state) ?? initialState
 );
