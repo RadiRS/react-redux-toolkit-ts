@@ -1,14 +1,19 @@
 import React, { FormEvent, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-import { useAppSelector, useAppDispatch } from "../../app/hooks";
+import { useAppSelector } from "../../app/hooks";
 import { selectAllUsers } from "../users/usersSlice";
-import { selectPostById, updatePost, deletePost } from "./postSlices";
-import { StatusType } from "./types";
+import {
+  useUpdatePostMutation,
+  useDeletePostMutation,
+  selectPostById,
+} from "./postSlices";
+import { PostInterface } from "./types";
 
 const EditPostForm = () => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+  const [updatePost, { isLoading }] = useUpdatePostMutation();
+  const [deletePost] = useDeletePostMutation();
 
   const { postId = "" } = useParams();
   const post = useAppSelector((state) => selectPostById(state, postId));
@@ -17,7 +22,6 @@ const EditPostForm = () => {
   const [title, setTitle] = useState<string>(post?.title || "");
   const [content, setContent] = useState<string>(post?.body || "");
   const [userId, setUserId] = useState<string>(post?.userId || "");
-  const [requestStatus, setRequestStatus] = useState<StatusType>("idle");
 
   const onTitleChanged = (e: FormEvent<HTMLInputElement>): void =>
     setTitle(e.currentTarget.value);
@@ -28,24 +32,22 @@ const EditPostForm = () => {
   const onAuthorChanged = (e: FormEvent<HTMLSelectElement>) =>
     setUserId(e.currentTarget.value);
 
-  const isCanSave =
-    [title, content, userId].every(Boolean) && requestStatus === "idle";
+  const isCanSave = [title, content, userId].every(Boolean) && !isLoading;
 
   const onSaveEditClicked = async () => {
     if (!isCanSave) return;
 
     try {
-      setRequestStatus("loading");
-
       const params = {
-        id: post?.id || "",
+        ...post,
         title,
-        body: content,
         userId,
+        body: content,
+        id: post?.id || "",
         reactions: post?.reactions,
-      };
+      } as PostInterface;
 
-      await dispatch(updatePost(params)).unwrap();
+      await updatePost(params).unwrap();
 
       setTitle("");
       setContent("");
@@ -53,16 +55,12 @@ const EditPostForm = () => {
       navigate(`/post/${postId}`);
     } catch (error) {
       console.log("error", error);
-    } finally {
-      setRequestStatus("idle");
     }
   };
 
   const onDeleteClicked = async () => {
     try {
-      setRequestStatus("loading");
-
-      await dispatch(deletePost(postId));
+      await deletePost(postId).unwrap();
 
       setTitle("");
       setContent("");
@@ -70,8 +68,6 @@ const EditPostForm = () => {
       navigate("/");
     } catch (error) {
       console.log("error", error);
-    } finally {
-      setRequestStatus("idle");
     }
   };
 
@@ -114,7 +110,7 @@ const EditPostForm = () => {
           onChange={onContentChanged}
         />
         <button type="button" disabled={!isCanSave} onClick={onSaveEditClicked}>
-          {requestStatus === "loading" ? "Loading..." : "Save Post"}
+          {isLoading ? "Loading..." : "Save Post"}
         </button>
         <button
           type="button"
@@ -122,7 +118,7 @@ const EditPostForm = () => {
           disabled={!isCanSave}
           onClick={onDeleteClicked}
         >
-          {requestStatus === "loading" ? "Loading..." : "Delete Post"}
+          {isLoading ? "Loading..." : "Delete Post"}
         </button>
       </form>
     </section>

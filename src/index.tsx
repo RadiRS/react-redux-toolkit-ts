@@ -7,11 +7,11 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import { store } from "./app/store";
 
+import { extendedApiSlice } from "./features/posts/postSlices";
 import { fetchUsers } from "./features/users/usersSlice";
-import { fetchPosts } from "./features/posts/postSlices";
 
 store.dispatch(fetchUsers());
-store.dispatch(fetchPosts());
+store.dispatch(extendedApiSlice.endpoints.getPosts.initiate());
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

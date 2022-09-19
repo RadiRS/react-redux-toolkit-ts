@@ -1,19 +1,17 @@
 import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { addNewPost } from "./postSlices";
+import { useAppSelector } from "../../app/hooks";
+import { useAddNewPostMutation } from "./postSlices";
 import { selectAllUsers } from "../users/usersSlice";
-import { StatusType } from "./types";
 
 const AddPostForm = () => {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [addNewPost, { isLoading }] = useAddNewPostMutation();
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [userId, setUserId] = useState("");
-  const [addRequestStatus, setAddRequestStatus] = useState<StatusType>("idle");
 
   const users = useAppSelector(selectAllUsers);
 
@@ -26,17 +24,14 @@ const AddPostForm = () => {
   const onAuthorChanged = (e: FormEvent<HTMLSelectElement>) =>
     setUserId(e.currentTarget.value);
 
-  const isCanSave =
-    [title, content, userId].every(Boolean) && addRequestStatus === "idle";
+  const isCanSave = [title, content, userId].every(Boolean) && !isLoading;
 
   const onSavePostClicked = async () => {
     if (!isCanSave) return;
 
     try {
-      setAddRequestStatus("loading");
-
       const params = { title, body: content, userId };
-      await dispatch(addNewPost(params)).unwrap();
+      await addNewPost(params).unwrap();
       setTitle("");
       setContent("");
       setUserId("");
@@ -44,11 +39,7 @@ const AddPostForm = () => {
       navigate("/");
     } catch (error) {
       console.log("Failed to save the post with error:", error);
-    } finally {
-      setAddRequestStatus("idle");
     }
-
-    // dispatch(addNewPost(title, content, userId));
   };
 
   const usersOptions = users.map((user) => (
@@ -82,7 +73,7 @@ const AddPostForm = () => {
           onChange={onContentChanged}
         />
         <button type="button" disabled={!isCanSave} onClick={onSavePostClicked}>
-          {addRequestStatus === "loading" ? "Loading..." : "Save Post"}
+          {isLoading ? "Loading..." : "Save Post"}
         </button>
       </form>
     </section>

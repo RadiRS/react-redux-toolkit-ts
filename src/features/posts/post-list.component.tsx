@@ -1,21 +1,22 @@
 import { useAppSelector } from "../../app/hooks";
 import PostsExcerpt from "./post-excerpt.component";
-import { getPostsError, getPostsStatus, selectPostIds } from "./postSlices";
+import { selectPostIds } from "./postSlices";
+
+import { useGetPostsQuery } from "./postSlices";
 
 const PostList = () => {
+  const { isLoading, isSuccess, isError, error } = useGetPostsQuery();
   const orderedPostsIds = useAppSelector(selectPostIds);
-  const postsStatus = useAppSelector(getPostsStatus);
-  const postsError = useAppSelector(getPostsError);
 
   let content;
-  if (postsStatus === "loading") {
+  if (isLoading) {
     content = <p>Loading...</p>;
-  } else if (postsStatus === "succeeded") {
+  } else if (isSuccess) {
     content = orderedPostsIds.map((postId) => (
       <PostsExcerpt key={postId} postId={postId} />
     ));
-  } else if (postsStatus === "failed") {
-    content = <p>{postsError}</p>;
+  } else if (isError) {
+    content = <p>{error}</p>;
   }
 
   return <section>{content}</section>;
