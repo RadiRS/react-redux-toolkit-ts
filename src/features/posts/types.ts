@@ -1,8 +1,8 @@
 export interface InitialPostInterface {
   // posts: PostInterface[];
-  status: StatusType;
-  error: string | undefined;
-  count: number;
+  status?: StatusType;
+  error?: string | undefined;
+  count?: number;
 }
 
 export interface PostInterface {

@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 
 import { useAppSelector } from "../../app/hooks";
-import { selectPostByUser } from "../posts/postSlices";
+import { useGetPostsByUserIdQuery } from "../posts/postSlices";
 import { selectUserById } from "./usersSlice";
 
 const UserPage = () => {
@@ -9,20 +9,33 @@ const UserPage = () => {
 
   const user = useAppSelector((state) => selectUserById(state, userId));
 
-  const postsForUser = useAppSelector((state) => {
-    return selectPostByUser(state, userId);
-  });
+  const {
+    data: postsForUser,
+    isLoading,
+    isSuccess,
+    isError,
+    error,
+  } = useGetPostsByUserIdQuery(userId);
 
-  const postTitles = postsForUser.map((post) => (
-    <li key={post.id}>
-      <Link to={`/post/${post.id}`}>{post.title}</Link>
-    </li>
-  ));
+  let content;
+
+  if (isLoading) {
+    content = <p>Loading..</p>;
+  } else if (isSuccess) {
+    const { ids, entities } = postsForUser;
+    content = ids.map((id) => (
+      <li key={id}>
+        <Link to={`/post/${entities[id]?.id}`}>{entities[id]?.title}</Link>
+      </li>
+    ));
+  } else if (isError) {
+    content = <p>{error.toString()}</p>;
+  }
 
   return (
     <section>
       <h2>{user?.name}</h2>
-      <ol>{postTitles}</ol>
+      <ol>{content}</ol>
     </section>
   );
 };

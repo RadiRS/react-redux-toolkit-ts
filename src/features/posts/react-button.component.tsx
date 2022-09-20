@@ -1,5 +1,4 @@
-import { useAppDispatch } from "../../app/hooks";
-import { reactionAdded } from "./postSlices";
+import { useAddReactionMutation } from "./postSlices";
 import { PostInterface, ReactionInterface } from "./types";
 
 interface ReactButtonsProps {
@@ -15,10 +14,13 @@ const reactionEmoji: Record<keyof ReactionInterface, string> = {
 };
 
 const ReactButtons = ({ post }: ReactButtonsProps) => {
-  const dispatch = useAppDispatch();
+  const [addReaction] = useAddReactionMutation();
 
   const onPressReact = (reactName: keyof ReactionInterface) => {
-    dispatch(reactionAdded({ postId: post.id, reaction: reactName }));
+    const newValue = post.reactions[reactName] + 1;
+    const newReaction = { ...post.reactions, [reactName]: newValue };
+
+    addReaction({ postId: post.id, reactions: newReaction });
   };
 
   const reactionButtons = Object.entries(reactionEmoji).map(([name, emoji]) => {
